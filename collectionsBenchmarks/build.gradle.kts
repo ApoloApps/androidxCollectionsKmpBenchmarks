@@ -20,6 +20,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.benchmark.runtime)
+            implementation(libs.androidx.collection)
 
         }
     }
