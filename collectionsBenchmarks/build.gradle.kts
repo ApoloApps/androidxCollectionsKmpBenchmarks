@@ -8,13 +8,12 @@ plugins {
 kotlin {
     jvm()
 
-    js {
-        nodeJs()
-    }
-
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        nodeJs()
+        nodejs()
+    }
+    js{
+        nodejs()
     }
     linuxArm64()
 
