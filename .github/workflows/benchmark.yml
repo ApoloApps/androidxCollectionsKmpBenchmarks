@@ -11,15 +11,8 @@ permissions:
 
 jobs:
   benchmark:
-    name: benchmark (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+    name: benchmark (ubuntu)
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -32,11 +25,7 @@ jobs:
           java-version: "21"
           cache: gradle
 
-      - name: Run benchmarks (Unix)
-        if: runner.os != 'Windows'
+      - name: Run benchmarks
         run: ./gradlew :collectionsBenchmarks:benchmark --no-daemon --stacktrace
 
-      - name: Run benchmarks (Windows)
-        if: runner.os == 'Windows'
-        run: .\gradlew.bat :collectionsBenchmarks:benchmark --no-daemon --stacktrace
 
