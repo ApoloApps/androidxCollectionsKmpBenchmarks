@@ -15,7 +15,7 @@ kotlin {
     js{
         nodejs()
     }
-    linuxArm64()
+    //linuxArm64()
     linuxX64()
 
     sourceSets {
