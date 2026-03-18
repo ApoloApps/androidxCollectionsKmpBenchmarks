@@ -36,7 +36,7 @@ open class ScatterMapBenchmarkTest {
     @Benchmark
     fun forEach() {
         @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last: String
-        map.forEach { _, value -> last = value }
+        map.forEach { (_, value) -> last = value }
     }
 
     @Benchmark
