@@ -46,6 +46,16 @@ open class ObjectListBenchmarkTest {
     }
 
     @Benchmark
+    fun set() {
+        val mutableList = MutableObjectList<String>(ObjectCount)
+
+        mutableList += list
+        repeat(ObjectCount) { mutableList[it] = array[it] }
+        mutableList.clear()
+
+    }
+
+    @Benchmark
     fun addAll() {
         val mutableList = MutableObjectList<String>(ObjectCount)
 
@@ -115,6 +125,16 @@ open class MutableListBenchmarkTest {
     @Benchmark
     fun get() {
         repeat(ObjectCount) { list[it] }
+    }
+
+    @Benchmark
+    fun set() {
+        val mutableList = ArrayList<String>(ObjectCount)
+
+        mutableList += list
+        repeat(ObjectCount) { mutableList[it] = array[it] }
+        mutableList.clear()
+
     }
 
     @Benchmark
