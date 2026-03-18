@@ -1,4 +1,4 @@
-name: Benchmarks
+name: Js Benchmarks
 
 on:
   workflow_dispatch:
