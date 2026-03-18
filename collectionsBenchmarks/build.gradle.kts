@@ -16,7 +16,9 @@ kotlin {
         nodejs()
     }
     //linuxArm64()
+if(System.getProperty("os.arch")== "amd64"){
     linuxX64()
+}
 
     sourceSets {
         commonMain.dependencies {
