@@ -1,4 +1,4 @@
-name: Benchmarks
+name: Desktop Jvm Benchmarks
 
 on:
   workflow_dispatch:
