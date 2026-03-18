@@ -16,6 +16,7 @@ kotlin {
         nodejs()
     }
     linuxArm64()
+    linuxX64()
 
     sourceSets {
         commonMain.dependencies {
@@ -31,6 +32,6 @@ benchmark {
         register("jvm")
         register("wasmJs")
         register("js")
-        register("linuxArm64")
+        register("linuxX64")
     }
 }
