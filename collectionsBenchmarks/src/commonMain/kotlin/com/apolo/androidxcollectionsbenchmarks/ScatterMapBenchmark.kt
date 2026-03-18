@@ -7,9 +7,15 @@ import kotlinx.benchmark.BenchmarkTimeUnit
 import kotlinx.benchmark.Measurement
 import kotlinx.benchmark.Mode
 import kotlinx.benchmark.OutputTimeUnit
+import kotlinx.benchmark.Param
 import kotlinx.benchmark.Scope
+import kotlinx.benchmark.Setup
 import kotlinx.benchmark.State
 import kotlinx.benchmark.Warmup
+
+private data class BadHashKey(val value: Int) {
+    override fun hashCode(): Int = 0
+}
 
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 1, timeUnit = BenchmarkTimeUnit.SECONDS)
@@ -17,69 +23,96 @@ import kotlinx.benchmark.Warmup
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
 @BenchmarkMode(Mode.Throughput)
 open class ScatterMapBenchmarkTest {
-    val objectCount = 100
+    @Param("10", "100", "1000", "16000")
+    var objectCount: Int = 100
 
-    private val map = mutableScatterMapOf<String, String>().also { target ->
-        repeat(objectCount) { index ->
-            target[index.toString()] = "value$index"
+    private lateinit var sourceSet: Array<String>
+    private lateinit var badHashSourceSet: Array<BadHashKey>
+
+    @Setup
+    fun setup() {
+        sourceSet = createDataSet(objectCount)
+        badHashSourceSet = createBadHashDataSet(objectCount)
+    }
+
+    @Benchmark
+    fun insert() {
+        val map = mutableScatterMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
         }
     }
 
-    private val keys = Array(objectCount) { it.toString() }
-    private val values = Array(objectCount) { "value$it" }
-    private val sourceMap: Map<String, String> = mutableMapOf<String, String>().also { source ->
-        repeat(objectCount) { index ->
-            source["source$index"] = "sourceValue$index"
+    @Benchmark
+    fun insertBadHash() {
+        val map = mutableScatterMapOf<BadHashKey, BadHashKey>()
+        for (testValue in badHashSourceSet) {
+            map[testValue] = testValue
+        }
+    }
+
+    @Benchmark
+    fun remove() {
+        val map = mutableScatterMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in sourceSet) {
+            map.remove(testValue)
+        }
+    }
+
+    @Benchmark
+    fun read() {
+        val map = mutableScatterMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in sourceSet) {
+            map[testValue]
+        }
+    }
+
+    @Benchmark
+    fun readBadHash() {
+        val map = mutableScatterMapOf<BadHashKey, BadHashKey>()
+        for (testValue in badHashSourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in badHashSourceSet) {
+            map[testValue]
         }
     }
 
     @Benchmark
     fun forEach() {
-        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last: String = ""
-        map.forEach { _, value -> last = value }
-    }
-
-    @Benchmark
-    fun put() {
-        val mutableMap = mutableScatterMapOf<String, String>()
-
-        repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+        val map = mutableScatterMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
         }
-        mutableMap.clear()
-    }
-
-    @Benchmark
-    fun containsKey() {
-        repeat(objectCount) { index ->
-            map.containsKey(keys[index])
+        map.forEach { key, value ->
+            @Suppress("UNUSED_EXPRESSION")
+            key == value
         }
     }
 
     @Benchmark
-    fun get() {
-        repeat(objectCount) { index ->
-            map[keys[index]]
+    fun compute() {
+        val map = mutableScatterMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in sourceSet) {
+            map[testValue] = map[testValue] ?: testValue
         }
     }
 
     @Benchmark
-    fun putAll() {
-        val mutableMap = mutableScatterMapOf<String, String>()
-
-        mutableMap.putAll(sourceMap)
-        mutableMap.clear()
-    }
-
-    @Benchmark
-    fun remove() {
-        val mutableMap = mutableScatterMapOf<String, String>()
-
-        repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
-        }
-        repeat(objectCount) { index ->
-            mutableMap.remove(keys[index])
+    fun insertRemove() {
+        val map = mutableScatterMapOf<BadHashKey, BadHashKey>()
+        for (testValue in badHashSourceSet) {
+            map[testValue] = testValue
+            map.remove(testValue)
         }
     }
 }
@@ -90,70 +123,101 @@ open class ScatterMapBenchmarkTest {
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
 @BenchmarkMode(Mode.Throughput)
 open class MutableMapBenchmarkTest {
-    val objectCount = 100
+    @Param("10", "100", "1000", "16000")
+    var objectCount: Int = 100
 
-    private val map: MutableMap<String, String> = mutableMapOf<String, String>().also { target ->
-        repeat(objectCount) { index ->
-            target[index.toString()] = "value$index"
+    private lateinit var sourceSet: Array<String>
+    private lateinit var badHashSourceSet: Array<BadHashKey>
+
+    @Setup
+    fun setup() {
+        sourceSet = createDataSet(objectCount)
+        badHashSourceSet = createBadHashDataSet(objectCount)
+    }
+
+    @Benchmark
+    fun insert() {
+        val map = mutableMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
         }
     }
 
-    private val keys = Array(objectCount) { it.toString() }
-    private val values = Array(objectCount) { "value$it" }
-    private val sourceMap: Map<String, String> = mutableMapOf<String, String>().also { source ->
-        repeat(objectCount) { index ->
-            source["source$index"] = "sourceValue$index"
+    @Benchmark
+    fun insertBadHash() {
+        val map = mutableMapOf<BadHashKey, BadHashKey>()
+        for (testValue in badHashSourceSet) {
+            map[testValue] = testValue
+        }
+    }
+
+    @Benchmark
+    fun remove() {
+        val map = mutableMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in sourceSet) {
+            map.remove(testValue)
+        }
+    }
+
+    @Benchmark
+    fun read() {
+        val map = mutableMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in sourceSet) {
+            map[testValue]
+        }
+    }
+
+    @Benchmark
+    fun readBadHash() {
+        val map = mutableMapOf<BadHashKey, BadHashKey>()
+        for (testValue in badHashSourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in badHashSourceSet) {
+            map[testValue]
         }
     }
 
     @Benchmark
     fun forEach() {
-        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last: String = ""
-        map.forEach { entry -> last = entry.value }
-    }
-
-    @Benchmark
-    fun put() {
-        val mutableMap = mutableMapOf<String, String>()
-
-        repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+        val map = mutableMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
         }
-        mutableMap.clear()
-    }
-
-    @Benchmark
-    fun containsKey() {
-        repeat(objectCount) { index ->
-            map.containsKey(keys[index])
+        map.forEach { entry ->
+            @Suppress("UNUSED_EXPRESSION")
+            entry.key == entry.value
         }
     }
 
     @Benchmark
-    fun get() {
-        repeat(objectCount) { index ->
-            map[keys[index]]
+    fun compute() {
+        val map = mutableMapOf<String, String>()
+        for (testValue in sourceSet) {
+            map[testValue] = testValue
+        }
+        for (testValue in sourceSet) {
+            map[testValue] = map[testValue] ?: testValue
         }
     }
 
     @Benchmark
-    fun putAll() {
-        val mutableMap = mutableMapOf<String, String>()
-
-        mutableMap.putAll(sourceMap)
-        mutableMap.clear()
-    }
-
-    @Benchmark
-    fun remove() {
-        val mutableMap = mutableMapOf<String, String>()
-
-        repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
-        }
-        repeat(objectCount) { index ->
-            mutableMap.remove(keys[index])
+    fun insertRemove() {
+        val map = mutableMapOf<BadHashKey, BadHashKey>()
+        for (testValue in badHashSourceSet) {
+            map[testValue] = testValue
+            map.remove(testValue)
         }
     }
 }
+
+internal fun createDataSet(size: Int): Array<String> = Array(size) { index -> index.toString() }
+
+internal fun createBadHashDataSet(size: Int): Array<BadHashKey> = Array(size) { BadHashKey(it) }
 
