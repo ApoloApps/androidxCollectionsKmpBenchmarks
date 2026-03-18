@@ -1,6 +1,6 @@
 package com.apolo.androidxcollectionsbenchmarks
 
-import androidx.collection.MutableScatterMap
+import androidx.collection.MutableIntSet
 import kotlinx.benchmark.*
 
 @State(Scope.Benchmark)
@@ -8,72 +8,66 @@ import kotlinx.benchmark.*
 @Measurement(iterations = 3, time = 1, timeUnit = BenchmarkTimeUnit.SECONDS)
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
 @BenchmarkMode(Mode.Throughput)
-open class MutableScatterMapBenchmarkTest {
+open class MutableIntSetBenchmarkTest {
     private val objectCount = 100
-    private val keys = Array(objectCount) { it.toString() }
-    private val values = Array(objectCount) { "value-$it" }
+    private val values = IntArray(objectCount) { it }
 
-    private val map = MutableScatterMap<String, String>(objectCount).also { target ->
+    private val set = MutableIntSet(objectCount).also { target ->
         repeat(objectCount) { index ->
-            target[keys[index]] = values[index]
+            target.add(values[index])
         }
     }
 
     @Benchmark
-    fun put() {
-        val mutableMap = MutableScatterMap<String, String>(objectCount)
+    fun add() {
+        val mutableSet = MutableIntSet(objectCount)
 
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+            mutableSet.add(values[index])
         }
-        mutableMap.clear()
+        mutableSet.clear()
     }
 
     @Benchmark
-    fun getHit() {
-        repeat(objectCount) { index -> map[keys[index]] }
+    fun containsHit() {
+        repeat(objectCount) { index -> set.contains(values[index]) }
     }
 
     @Benchmark
-    fun getMiss() {
-        repeat(objectCount) { index -> map["missing-$index"] }
+    fun containsMiss() {
+        repeat(objectCount) { index -> set.contains(objectCount + index) }
     }
 
     @Benchmark
-    fun containsKey() {
-        repeat(objectCount) { index -> map.containsKey(keys[index]) }
-    }
-
-    @Benchmark
-    fun updateExisting() {
-        val mutableMap = MutableScatterMap<String, String>(objectCount)
+    fun addExisting() {
+        val mutableSet = MutableIntSet(objectCount)
 
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+            mutableSet.add(values[index])
         }
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = "updated-$index"
+            mutableSet.add(values[index])
         }
-        mutableMap.clear()
+        mutableSet.clear()
     }
 
     @Benchmark
     fun removeExisting() {
-        val mutableMap = MutableScatterMap<String, String>(objectCount)
+        val mutableSet = MutableIntSet(objectCount)
 
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+            mutableSet.add(values[index])
         }
         repeat(objectCount) { index ->
-            mutableMap.remove(keys[index])
+            mutableSet.remove(values[index])
         }
     }
 
     @Benchmark
-    fun iterateEntries() {
-        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last: String?
-        map.forEach { key, value ->
-            last = "$key:$value"
+    fun iterateElements() {
+        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last = -1
+        set.forEach { value ->
+            last = value
         }
     }
 }
@@ -83,72 +77,66 @@ open class MutableScatterMapBenchmarkTest {
 @Measurement(iterations = 3, time = 1, timeUnit = BenchmarkTimeUnit.SECONDS)
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
 @BenchmarkMode(Mode.Throughput)
-open class MutableMapBenchmarkTest {
+open class MutableSetOfIntBenchmarkTest {
     private val objectCount = 100
-    private val keys = Array(objectCount) { it.toString() }
-    private val values = Array(objectCount) { "value-$it" }
+    private val values = IntArray(objectCount) { it }
 
-    private val map: MutableMap<String, String> = HashMap<String, String>(objectCount).also { target ->
+    private val set: MutableSet<Int> = mutableSetOf<Int>().also { target ->
         repeat(objectCount) { index ->
-            target[keys[index]] = values[index]
+            target.add(values[index])
         }
     }
 
     @Benchmark
-    fun put() {
-        val mutableMap = HashMap<String, String>(objectCount)
+    fun add() {
+        val mutableSet = mutableSetOf<Int>()
 
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+            mutableSet.add(values[index])
         }
-        mutableMap.clear()
+        mutableSet.clear()
     }
 
     @Benchmark
-    fun getHit() {
-        repeat(objectCount) { index -> map[keys[index]] }
+    fun containsHit() {
+        repeat(objectCount) { index -> set.contains(values[index]) }
     }
 
     @Benchmark
-    fun getMiss() {
-        repeat(objectCount) { index -> map["missing-$index"] }
+    fun containsMiss() {
+        repeat(objectCount) { index -> set.contains(objectCount + index) }
     }
 
     @Benchmark
-    fun containsKey() {
-        repeat(objectCount) { index -> map.containsKey(keys[index]) }
-    }
-
-    @Benchmark
-    fun updateExisting() {
-        val mutableMap = HashMap<String, String>(objectCount)
+    fun addExisting() {
+        val mutableSet = mutableSetOf<Int>()
 
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+            mutableSet.add(values[index])
         }
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = "updated-$index"
+            mutableSet.add(values[index])
         }
-        mutableMap.clear()
+        mutableSet.clear()
     }
 
     @Benchmark
     fun removeExisting() {
-        val mutableMap = HashMap<String, String>(objectCount)
+        val mutableSet = mutableSetOf<Int>()
 
         repeat(objectCount) { index ->
-            mutableMap[keys[index]] = values[index]
+            mutableSet.add(values[index])
         }
         repeat(objectCount) { index ->
-            mutableMap.remove(keys[index])
+            mutableSet.remove(values[index])
         }
     }
 
     @Benchmark
-    fun iterateEntries() {
-        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last: String?
-        map.forEach { (key, value) ->
-            last = "$key:$value"
+    fun iterateElements() {
+        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last = -1
+        set.forEach { value ->
+            last = value
         }
 
     }
