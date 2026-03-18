@@ -10,11 +10,20 @@ import kotlinx.benchmark.*
 @BenchmarkMode(Mode.Throughput)
 open class MutableIntSetBenchmarkTest {
     private val objectCount = 100
-    private val values = IntArray(objectCount) { it }
+    private val values = IntArray(objectCount) { index -> index * 17 + 3 }
+    private val misses = IntArray(objectCount) { index -> index * 17 + 1_000_003 }
 
     private val set = MutableIntSet(objectCount).also { target ->
         repeat(objectCount) { index ->
             target.add(values[index])
+        }
+    }
+
+    @Benchmark
+    fun forEach() {
+        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last = -1
+        set.forEach { value ->
+            last = value
         }
     }
 
@@ -29,24 +38,19 @@ open class MutableIntSetBenchmarkTest {
     }
 
     @Benchmark
-    fun containsHit() {
+    fun contains() {
         repeat(objectCount) { index -> set.contains(values[index]) }
     }
 
     @Benchmark
-    fun containsMiss() {
-        repeat(objectCount) { index -> set.contains(objectCount + index) }
-    }
-
-    @Benchmark
-    fun addExisting() {
-        val mutableSet = MutableIntSet(objectCount)
+    fun addAll() {
+        val mutableSet = MutableIntSet(objectCount * 2)
 
         repeat(objectCount) { index ->
             mutableSet.add(values[index])
         }
-        repeat(objectCount) { index ->
-            mutableSet.add(values[index])
+        set.forEach { value ->
+            mutableSet.add(value)
         }
         mutableSet.clear()
     }
@@ -61,14 +65,35 @@ open class MutableIntSetBenchmarkTest {
         repeat(objectCount) { index ->
             mutableSet.remove(values[index])
         }
+        mutableSet.clear()
     }
 
     @Benchmark
-    fun iterateElements() {
-        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last = -1
-        set.forEach { value ->
-            last = value
+    fun removeMissing() {
+        val mutableSet = MutableIntSet(objectCount)
+
+        repeat(objectCount) { index ->
+            mutableSet.add(values[index])
         }
+        repeat(objectCount) { index ->
+            mutableSet.remove(misses[index])
+        }
+        mutableSet.clear()
+    }
+
+    @Benchmark
+    fun containsMisses() {
+        repeat(objectCount) { index -> set.contains(misses[index]) }
+    }
+
+    @Benchmark
+    fun clear() {
+        val mutableSet = MutableIntSet(objectCount)
+
+        repeat(objectCount) { index ->
+            mutableSet.add(values[index])
+        }
+        mutableSet.clear()
     }
 }
 
@@ -79,11 +104,20 @@ open class MutableIntSetBenchmarkTest {
 @BenchmarkMode(Mode.Throughput)
 open class MutableSetOfIntBenchmarkTest {
     private val objectCount = 100
-    private val values = IntArray(objectCount) { it }
+    private val values = IntArray(objectCount) { index -> index * 17 + 3 }
+    private val misses = IntArray(objectCount) { index -> index * 17 + 1_000_003 }
 
     private val set: MutableSet<Int> = mutableSetOf<Int>().also { target ->
         repeat(objectCount) { index ->
             target.add(values[index])
+        }
+    }
+
+    @Benchmark
+    fun forEach() {
+        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last = -1
+        set.forEach { value ->
+            last = value
         }
     }
 
@@ -98,25 +132,18 @@ open class MutableSetOfIntBenchmarkTest {
     }
 
     @Benchmark
-    fun containsHit() {
+    fun contains() {
         repeat(objectCount) { index -> set.contains(values[index]) }
     }
 
     @Benchmark
-    fun containsMiss() {
-        repeat(objectCount) { index -> set.contains(objectCount + index) }
-    }
-
-    @Benchmark
-    fun addExisting() {
+    fun addAll() {
         val mutableSet = mutableSetOf<Int>()
 
         repeat(objectCount) { index ->
             mutableSet.add(values[index])
         }
-        repeat(objectCount) { index ->
-            mutableSet.add(values[index])
-        }
+        mutableSet.addAll(set)
         mutableSet.clear()
     }
 
@@ -130,14 +157,34 @@ open class MutableSetOfIntBenchmarkTest {
         repeat(objectCount) { index ->
             mutableSet.remove(values[index])
         }
+        mutableSet.clear()
     }
 
     @Benchmark
-    fun iterateElements() {
-        @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE") var last = -1
-        set.forEach { value ->
-            last = value
-        }
+    fun removeMissing() {
+        val mutableSet = mutableSetOf<Int>()
 
+        repeat(objectCount) { index ->
+            mutableSet.add(values[index])
+        }
+        repeat(objectCount) { index ->
+            mutableSet.remove(misses[index])
+        }
+        mutableSet.clear()
+    }
+
+    @Benchmark
+    fun containsMisses() {
+        repeat(objectCount) { index -> set.contains(misses[index]) }
+    }
+
+    @Benchmark
+    fun clear() {
+        val mutableSet = mutableSetOf<Int>()
+
+        repeat(objectCount) { index ->
+            mutableSet.add(values[index])
+        }
+        mutableSet.clear()
     }
 }
