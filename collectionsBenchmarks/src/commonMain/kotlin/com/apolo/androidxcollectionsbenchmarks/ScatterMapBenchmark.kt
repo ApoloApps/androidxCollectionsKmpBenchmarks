@@ -1,6 +1,6 @@
 package com.apolo.androidxcollectionsbenchmarks
 
-import androidx.collection.mutableScatterMapOf
+import androidx.collection.mutableObjectIntMapOf
 import kotlinx.benchmark.Benchmark
 import kotlinx.benchmark.BenchmarkMode
 import kotlinx.benchmark.BenchmarkTimeUnit
@@ -22,7 +22,7 @@ private data class BadHashKey(val value: Int) {
 @Measurement(iterations = 3, time = 1, timeUnit = BenchmarkTimeUnit.SECONDS)
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
 @BenchmarkMode(Mode.Throughput)
-open class ScatterMapBenchmarkTest {
+open class ObjectIntMapBenchmarkTest {
     @Param("10", "100", "1000", "16000")
     var objectCount: Int = 100
 
@@ -37,25 +37,25 @@ open class ScatterMapBenchmarkTest {
 
     @Benchmark
     fun insert() {
-        val map = mutableScatterMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableObjectIntMapOf<String>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
     }
 
     @Benchmark
     fun insertBadHash() {
-        val map = mutableScatterMapOf<BadHashKey, BadHashKey>()
+        val map = mutableObjectIntMapOf<BadHashKey>()
         for (testValue in badHashSourceSet) {
-            map[testValue] = testValue
+            map[testValue] = testValue.value
         }
     }
 
     @Benchmark
     fun remove() {
-        val map = mutableScatterMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableObjectIntMapOf<String>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         for (testValue in sourceSet) {
             map.remove(testValue)
@@ -64,9 +64,9 @@ open class ScatterMapBenchmarkTest {
 
     @Benchmark
     fun read() {
-        val map = mutableScatterMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableObjectIntMapOf<String>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         for (testValue in sourceSet) {
             map[testValue]
@@ -75,9 +75,9 @@ open class ScatterMapBenchmarkTest {
 
     @Benchmark
     fun readBadHash() {
-        val map = mutableScatterMapOf<BadHashKey, BadHashKey>()
+        val map = mutableObjectIntMapOf<BadHashKey>()
         for (testValue in badHashSourceSet) {
-            map[testValue] = testValue
+            map[testValue] = testValue.value
         }
         for (testValue in badHashSourceSet) {
             map[testValue]
@@ -86,32 +86,36 @@ open class ScatterMapBenchmarkTest {
 
     @Benchmark
     fun forEach() {
-        val map = mutableScatterMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableObjectIntMapOf<String>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         map.forEach { key, value ->
             @Suppress("UNUSED_EXPRESSION")
-            key == value
+            key.isNotEmpty() || value >= 0
         }
     }
 
     @Benchmark
     fun compute() {
-        val map = mutableScatterMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableObjectIntMapOf<String>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         for (testValue in sourceSet) {
-            map[testValue] = map[testValue] ?: testValue
+            if (map.containsKey(testValue)) {
+                map[testValue] = map[testValue] + 1
+            } else {
+                map[testValue] = 1
+            }
         }
     }
 
     @Benchmark
     fun insertRemove() {
-        val map = mutableScatterMapOf<BadHashKey, BadHashKey>()
+        val map = mutableObjectIntMapOf<BadHashKey>()
         for (testValue in badHashSourceSet) {
-            map[testValue] = testValue
+            map[testValue] = testValue.value
             map.remove(testValue)
         }
     }
@@ -137,25 +141,25 @@ open class MutableMapBenchmarkTest {
 
     @Benchmark
     fun insert() {
-        val map = mutableMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableMapOf<String, Int>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
     }
 
     @Benchmark
     fun insertBadHash() {
-        val map = mutableMapOf<BadHashKey, BadHashKey>()
+        val map = mutableMapOf<BadHashKey, Int>()
         for (testValue in badHashSourceSet) {
-            map[testValue] = testValue
+            map[testValue] = testValue.value
         }
     }
 
     @Benchmark
     fun remove() {
-        val map = mutableMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableMapOf<String, Int>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         for (testValue in sourceSet) {
             map.remove(testValue)
@@ -164,9 +168,9 @@ open class MutableMapBenchmarkTest {
 
     @Benchmark
     fun read() {
-        val map = mutableMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableMapOf<String, Int>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         for (testValue in sourceSet) {
             map[testValue]
@@ -175,9 +179,9 @@ open class MutableMapBenchmarkTest {
 
     @Benchmark
     fun readBadHash() {
-        val map = mutableMapOf<BadHashKey, BadHashKey>()
+        val map = mutableMapOf<BadHashKey, Int>()
         for (testValue in badHashSourceSet) {
-            map[testValue] = testValue
+            map[testValue] = testValue.value
         }
         for (testValue in badHashSourceSet) {
             map[testValue]
@@ -186,32 +190,36 @@ open class MutableMapBenchmarkTest {
 
     @Benchmark
     fun forEach() {
-        val map = mutableMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableMapOf<String, Int>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         map.forEach { entry ->
             @Suppress("UNUSED_EXPRESSION")
-            entry.key == entry.value
+            entry.key.isNotEmpty() || entry.value >= 0
         }
     }
 
     @Benchmark
     fun compute() {
-        val map = mutableMapOf<String, String>()
-        for (testValue in sourceSet) {
-            map[testValue] = testValue
+        val map = mutableMapOf<String, Int>()
+        for (index in sourceSet.indices) {
+            map[sourceSet[index]] = index
         }
         for (testValue in sourceSet) {
-            map[testValue] = map[testValue] ?: testValue
+            if (map.containsKey(testValue)) {
+                map[testValue] = (map[testValue] ?: 0) + 1
+            } else {
+                map[testValue] = 1
+            }
         }
     }
 
     @Benchmark
     fun insertRemove() {
-        val map = mutableMapOf<BadHashKey, BadHashKey>()
+        val map = mutableMapOf<BadHashKey, Int>()
         for (testValue in badHashSourceSet) {
-            map[testValue] = testValue
+            map[testValue] = testValue.value
             map.remove(testValue)
         }
     }
