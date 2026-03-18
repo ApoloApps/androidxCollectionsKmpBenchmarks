@@ -13,8 +13,8 @@ permissions:
 
 jobs:
   benchmark:
-    name: benchmark (ubuntu)
-    runs-on: ubuntu-latest
+    name: Desktop Jvm Benchmarks
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout
@@ -31,6 +31,6 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Run benchmarks
-        run: ./gradlew :collectionsBenchmarks:benchmark --no-daemon --stacktrace
+        run: ./gradlew :collectionsBenchmarks:jvmBenchmark --no-daemon --stacktrace
 
 
