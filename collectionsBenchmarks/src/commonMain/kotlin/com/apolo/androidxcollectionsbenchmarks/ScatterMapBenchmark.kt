@@ -217,7 +217,7 @@ open class MutableMapBenchmarkTest {
     }
 }
 
-internal fun createDataSet(size: Int): Array<String> = Array(size) { index -> index.toString() }
+private fun createDataSet(size: Int): Array<String> = Array(size) { index -> index.toString() }
 
-internal fun createBadHashDataSet(size: Int): Array<BadHashKey> = Array(size) { BadHashKey(it) }
+private fun createBadHashDataSet(size: Int): Array<BadHashKey> = Array(size) { BadHashKey(it) }
 
