@@ -46,6 +46,11 @@ open class ObjectListBenchmarkTest {
     }
 
     @Benchmark
+    fun first() {
+        repeat(ObjectCount) { list.first() }
+    }
+
+    @Benchmark
     fun set() {
         val mutableList = MutableObjectList<String>(ObjectCount)
 
@@ -125,6 +130,11 @@ open class MutableListBenchmarkTest {
     @Benchmark
     fun get() {
         repeat(ObjectCount) { list[it] }
+    }
+
+    @Benchmark
+    fun first() {
+        repeat(ObjectCount) { list.first() }
     }
 
     @Benchmark

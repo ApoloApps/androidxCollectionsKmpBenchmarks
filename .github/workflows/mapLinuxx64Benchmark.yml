@@ -1,4 +1,4 @@
-name: Native Linux x64 Benchmarks
+name: Map Native Linux x64 Benchmarks
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   benchmark:
-    name: Native Linux x64 Benchmarks
+    name: Map Native Linux x64 Benchmarks
     runs-on: ubuntu-latest
 
     steps:

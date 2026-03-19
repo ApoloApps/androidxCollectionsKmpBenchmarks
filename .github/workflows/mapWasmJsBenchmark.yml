@@ -1,4 +1,4 @@
-name: WasmJs Benchmarks
+name: Map WasmJs Benchmarks
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   benchmark:
-    name: WasmJs Benchmarks
+    name: Map WasmJs Benchmarks
     runs-on: ubuntu-24.04-arm
 
     steps:
