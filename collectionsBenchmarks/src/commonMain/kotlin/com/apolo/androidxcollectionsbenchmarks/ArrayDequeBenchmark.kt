@@ -7,7 +7,7 @@ import kotlinx.benchmark.*
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
 @Warmup(iterations = 2, time = 2)
-@Measurement(iterations = 5, time = 2)
+@Measurement(iterations = 4, time = 2)
 open class ArrayDequeBenchmark {
 
     @Param("16", "256", "4096")

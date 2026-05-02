@@ -20,12 +20,6 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          # JVM benchmarks — JMH is happy on either arch but the arm runners are faster + free.
-          - id: jvm
-            label: Desktop / JVM
-            runner: ubuntu-24.04-arm
-            gradle-task: ":collectionsBenchmarks:jvmDepthsortedsetbenchmarkonlyBenchmark"
-
           # JS (Node) — needs no native toolchain, runs on arm.
           - id: js
             label: Kotlin/JS (Node)

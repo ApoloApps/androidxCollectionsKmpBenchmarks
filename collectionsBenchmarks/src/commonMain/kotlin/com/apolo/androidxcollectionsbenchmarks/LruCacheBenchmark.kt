@@ -20,8 +20,8 @@ import kotlinx.benchmark.*
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(BenchmarkTimeUnit.MICROSECONDS)
-@Warmup(iterations = 3, time = 2)
-@Measurement(iterations = 5, time = 2)
+@Warmup(iterations = 2, time = 2)
+@Measurement(iterations = 4, time = 2)
 open class LruCacheBenchmark {
 
     @Param("16", "256", "4096")
