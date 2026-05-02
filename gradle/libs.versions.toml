@@ -2,9 +2,11 @@
 kotlin = "2.3.20"
 kotlinBenchmark = "0.4.16"
 androidxCollection = "1.6.0"
+atomicFu = "0.28.0"
 [libraries]
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinBenchmark" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidxCollection" }
+atomicFu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicFu" }
 [plugins]
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinBenchmark" }
