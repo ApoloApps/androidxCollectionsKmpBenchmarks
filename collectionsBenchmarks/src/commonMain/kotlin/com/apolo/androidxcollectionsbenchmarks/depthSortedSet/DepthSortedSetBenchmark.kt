@@ -15,8 +15,6 @@ open class DepthSortedSetBenchmark {
 
     private lateinit var source: IntArray
 
-    private lateinit var newnewSetFilled: NewNewSortedSet<Int>
-
     private lateinit var newSetFilled: NewSortedSet<Int>
     private lateinit var oldSetFilled: OldSortedSet<Int>
     
@@ -27,22 +25,13 @@ open class DepthSortedSetBenchmark {
         source = IntArray(size) { it }
         source.shuffle(Random(42))
 
-        newnewSetFilled = NewNewSortedSet(comparator)
         newSetFilled = NewSortedSet(comparator)
         oldSetFilled = OldSortedSet(comparator)
         
         for (i in 0 until size) {
-            newnewSetFilled.add(source[i])
             newSetFilled.add(source[i])
             oldSetFilled.add(source[i])
         }
-    }
-
-    @Benchmark
-    fun newnewSetAdd(bh: Blackhole) {
-        val s = NewNewSortedSet(comparator)
-        for (i in 0 until size) s.add(source[i])
-        bh.consume(s)
     }
 
     @Benchmark
@@ -56,14 +45,6 @@ open class DepthSortedSetBenchmark {
     fun oldSetAdd(bh: Blackhole) {
         val s = OldSortedSet(comparator)
         for (i in 0 until size) s.add(source[i])
-        bh.consume(s)
-    }
-
-    @Benchmark
-    fun newnewSetRemove(bh: Blackhole) {
-        val s = NewSortedSet(comparator)
-        for (i in 0 until size) s.add(source[i])
-        for (i in 0 until size) s.remove(source[i])
         bh.consume(s)
     }
 
@@ -84,11 +65,6 @@ open class DepthSortedSetBenchmark {
     }
 
     @Benchmark
-    fun newnewSetContains(bh: Blackhole) {
-        bh.consume(newnewSetFilled.contains(source[size - 1]))
-    }
-
-    @Benchmark
     fun newSetContains(bh: Blackhole) {
         bh.consume(newSetFilled.contains(source[size - 1]))
     }
@@ -96,11 +72,6 @@ open class DepthSortedSetBenchmark {
     @Benchmark
     fun oldSetContains(bh: Blackhole) {
         bh.consume(oldSetFilled.contains(source[size - 1]))
-    }
-
-    @Benchmark
-    fun newnewSetFirst(bh: Blackhole) {
-        bh.consume(newnewSetFilled.first())
     }
 
     @Benchmark
