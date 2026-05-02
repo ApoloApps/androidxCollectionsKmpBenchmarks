@@ -2,7 +2,6 @@ package com.apolo.androidxcollectionsbenchmarks.depthSortedSet
 
 import androidx.collection.mutableObjectIntMapOf
 import androidx.collection.mutableObjectListOf
-import androidx.collection.mutableScatterMapOf
 
 
 /**
@@ -51,7 +50,7 @@ internal  class NewSortedSet<E>(
     /**
      * Maps each element to its index in [itemTree].
      */
-    private val indexByElement = mutableScatterMapOf<E, Int>()
+    private val indexByElement = mutableMapOf<E, Int>()
 
     /**
      * Inserts [element], if it's not already in the set.
