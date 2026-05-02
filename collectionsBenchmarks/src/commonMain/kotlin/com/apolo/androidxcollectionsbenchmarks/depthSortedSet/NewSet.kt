@@ -101,7 +101,7 @@ internal  class NewSortedSet<E>(
     /**
      * Returns the smallest item in the set, according to [comparator].
      */
-    fun first() = itemTree[0]
+    fun first() = itemTree.first()
 
     /**
      * Returns whether the set is empty.
