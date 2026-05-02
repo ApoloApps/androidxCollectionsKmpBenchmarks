@@ -72,5 +72,13 @@ benchmark {
             reportFormat = "json"
             param("size", "256")
         }
+        register("depthsortedsetbenchmarkonly") {
+            warmups = 3
+            iterations = 5
+            iterationTime = 2
+            iterationTimeUnit = "s"
+            reportFormat = "json"
+            include("DepthSortedSetBenchmark")
+        }
     }
 }
