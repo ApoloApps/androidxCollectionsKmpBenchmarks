@@ -25,6 +25,7 @@ if(System.getProperty("os.arch")== "amd64"){
             implementation(libs.kotlinx.benchmark.runtime)
             implementation(libs.androidx.collection)
             implementation(libs.atomicFu)
+            implementation(libs.compose.runtime)
 
         }
     }
@@ -55,6 +56,15 @@ benchmark {
             iterationTimeUnit = "s"
             reportFormat = "json"
             include("DepthSortedSetBenchmark")
+        }
+
+        register("mutablevectorbenchmarkonly") {
+            warmups = 2
+            iterations = 4
+            iterationTime = 2
+            iterationTimeUnit = "s"
+            reportFormat = "json"
+            include("MutableVectorBenchmark")
         }
     }
 }
