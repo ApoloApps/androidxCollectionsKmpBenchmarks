@@ -19,6 +19,7 @@ kotlin {
 if(System.getProperty("os.arch")== "amd64"){
     linuxX64()
 }
+    iosArm64()
 
     sourceSets {
         commonMain.dependencies {
@@ -37,6 +38,7 @@ benchmark {
         register("wasmJs")
         register("js")
         register("linuxX64")
+        register("iosArm64")
     }
     // Default config: deliberately short so CI runs finish in reasonable time.
     // Override per-class @Warmup/@Measurement still apply when set on the class.

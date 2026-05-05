@@ -45,6 +45,12 @@ jobs:
             runner: ubuntu-latest
             gradle-task: ":collectionsBenchmarks:linuxX64Benchmark"
 
+          # Native iOS (arm64) — builds the binary only, execution requires a physical device.
+          - id: iosArm64
+            label: Native iOS (arm64)
+            runner: macos-latest
+            gradle-task: ":collectionsBenchmarks:iosArm64Binaries"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,5 +78,6 @@ jobs:
           path: |
             collectionsBenchmarks/build/reports/benchmarks/**
             collectionsBenchmarks/build/benchmarks/**
+            collectionsBenchmarks/build/bin/**
           if-no-files-found: ignore
           retention-days: 14
