@@ -19,7 +19,6 @@ kotlin {
 if(System.getProperty("os.arch")== "amd64"){
     linuxX64()
 }
-    iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
@@ -39,7 +38,6 @@ benchmark {
         register("wasmJs")
         register("js")
         register("linuxX64")
-        register("iosArm64")
         register("iosSimulatorArm64")
     }
     // Default config: deliberately short so CI runs finish in reasonable time.
