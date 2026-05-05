@@ -39,11 +39,11 @@ jobs:
 #            runner: ubuntu-latest
 #            gradle-task: ":collectionsBenchmarks:linuxX64DepthsortedsetbenchmarkonlyBenchmark"
 
-          # Native iOS Simulator (arm64) — builds and runs the benchmark on macOS runner.
-          - id: iosSimulatorArm64
-            label: Native iOS Simulator (arm64)
+          # Native macOS (arm64) — builds and runs the benchmark on macOS
+          - id: macosArm64
+            label: Native macOS (arm64)
             runner: macos-latest
-            gradle-task: ":collectionsBenchmarks:depthsortedsetbenchmarkonlyBenchmark "
+            gradle-task: ":collectionsBenchmarks:macosArm64DepthsortedsetbenchmarkonlyBenchmark""
 
     steps:
       - name: Checkout

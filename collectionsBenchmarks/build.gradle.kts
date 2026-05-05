@@ -20,6 +20,7 @@ if(System.getProperty("os.arch")== "amd64"){
     linuxX64()
 }
     iosSimulatorArm64()
+    macosArm64()
 
     sourceSets {
         commonMain.dependencies {
@@ -36,6 +37,7 @@ benchmark {
     targets {
         register("jvm")
         register("wasmJs")
+        register("macosArm64")
         register("js")
         register("linuxX64")
         register("iosSimulatorArm64")
