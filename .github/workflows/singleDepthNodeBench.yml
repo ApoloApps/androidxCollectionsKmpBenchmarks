@@ -43,7 +43,7 @@ jobs:
           - id: iosSimulatorArm64
             label: Native iOS Simulator (arm64)
             runner: macos-latest
-            gradle-task: ":collectionsBenchmarks:iosSimulatorArm64DepthsortedsetbenchmarkonlyBenchmark"
+            gradle-task: ":collectionsBenchmarks:depthsortedsetbenchmarkonlyBenchmark "
 
     steps:
       - name: Checkout
