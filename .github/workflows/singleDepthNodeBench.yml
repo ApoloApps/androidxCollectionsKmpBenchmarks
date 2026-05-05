@@ -43,7 +43,7 @@ jobs:
           - id: macosArm64
             label: Native macOS (arm64)
             runner: macos-latest
-            gradle-task: ":collectionsBenchmarks:macosArm64DepthsortedsetbenchmarkonlyBenchmark""
+            gradle-task: ":collectionsBenchmarks:macosArm64DepthsortedsetbenchmarkonlyBenchmark"
 
     steps:
       - name: Checkout
