@@ -35,7 +35,7 @@ import kotlinx.benchmark.*
 open class PointerInputEventBenchmark {
 
     /** Realistic multi-touch pointer counts plus larger sizes to amplify per-entry overhead. */
-    @Param("1", "2", "5", "10", "32")
+    @Param("1", "2", "5", "10")
     var pointers: Int = 0
 
     private lateinit var current: PointerInputEvent
