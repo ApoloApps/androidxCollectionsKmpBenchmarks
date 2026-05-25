@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         target:
-           JS (Node) — needs no native toolchain, runs on arm.
+          #JS (Node) — needs no native toolchain, runs on arm.
           - id: js
             label: Kotlin/JS (Node)
             runner: ubuntu-24.04-arm
@@ -39,7 +39,7 @@ jobs:
             runner: ubuntu-latest
             gradle-task: ":collectionsBenchmarks:linuxX64PointerinputeventbenchmarkonlyBenchmark"
 
-          # Native macOS (arm64) — builds and runs the benchmark on macOS
+#           Native macOS (arm64) — builds and runs the benchmark on macOS
 #          - id: macosArm64
 #            label: Native macOS (arm64)
 #            runner: macos-latest
