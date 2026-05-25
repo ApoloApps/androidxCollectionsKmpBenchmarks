@@ -70,5 +70,14 @@ benchmark {
             reportFormat = "json"
             include("MutableVectorBenchmark")
         }
+
+        register("pointerinputeventbenchmarkonly") {
+            warmups = 2
+            iterations = 4
+            iterationTime = 2
+            iterationTimeUnit = "s"
+            reportFormat = "json"
+            include("PointerInputEventBenchmark")
+        }
     }
 }

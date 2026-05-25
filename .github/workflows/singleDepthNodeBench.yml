@@ -20,30 +20,30 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          # JS (Node) — needs no native toolchain, runs on arm.
-#          - id: js
-#            label: Kotlin/JS (Node)
-#            runner: ubuntu-24.04-arm
-#            gradle-task: ":collectionsBenchmarks:jsDepthsortedsetbenchmarkonlyBenchmark"
-#
-#          # Wasm/JS (Node) — same as JS.
-#          - id: wasmJs
-#            label: Kotlin/Wasm (Node)
-#            runner: ubuntu-24.04-arm
-#            gradle-task: ":collectionsBenchmarks:wasmJsDepthsortedsetbenchmarkonlyBenchmark"
-#
-#          # Native Linux x64 — module's build.gradle.kts only registers the linuxX64 target on
-#          # amd64 hosts, so this job MUST stay on x86_64 to compile and link.
-#          - id: linuxX64
-#            label: Native Linux x64
-#            runner: ubuntu-latest
-#            gradle-task: ":collectionsBenchmarks:linuxX64DepthsortedsetbenchmarkonlyBenchmark"
+           JS (Node) — needs no native toolchain, runs on arm.
+          - id: js
+            label: Kotlin/JS (Node)
+            runner: ubuntu-24.04-arm
+            gradle-task: ":collectionsBenchmarks:jsPointerinputeventbenchmarkonlyBenchmark"
+
+          # Wasm/JS (Node) — same as JS.
+          - id: wasmJs
+            label: Kotlin/Wasm (Node)
+            runner: ubuntu-24.04-arm
+            gradle-task: ":collectionsBenchmarks:wasmJsPointerinputeventbenchmarkonlyBenchmark"
+
+          # Native Linux x64 — module's build.gradle.kts only registers the linuxX64 target on
+          # amd64 hosts, so this job MUST stay on x86_64 to compile and link.
+          - id: linuxX64
+            label: Native Linux x64
+            runner: ubuntu-latest
+            gradle-task: ":collectionsBenchmarks:linuxX64PointerinputeventbenchmarkonlyBenchmark"
 
           # Native macOS (arm64) — builds and runs the benchmark on macOS
-          - id: macosArm64
-            label: Native macOS (arm64)
-            runner: macos-latest
-            gradle-task: ":collectionsBenchmarks:macosArm64DepthsortedsetbenchmarkonlyBenchmark"
+#          - id: macosArm64
+#            label: Native macOS (arm64)
+#            runner: macos-latest
+#            gradle-task: ":collectionsBenchmarks:macosArm64DepthsortedsetbenchmarkonlyBenchmark"
 
     steps:
       - name: Checkout
