@@ -112,5 +112,32 @@ benchmark {
             reportFormat = "json"
             include("PointerInputEventBenchmark")
         }
+
+        register("flushcoroutinedispatcherbenchmarkonly") {
+            warmups = 2
+            iterations = 4
+            iterationTime = 2
+            iterationTimeUnit = "s"
+            reportFormat = "json"
+            include("FlushCoroutineDispatcherBenchmark")
+        }
+
+        register("scatterMapBenchOnly") {
+            warmups = 2
+            iterations = 4
+            iterationTime = 2
+            iterationTimeUnit = "s"
+            reportFormat = "json"
+            include("ScatterMapBenchmark")
+        }
+
+        register("scatterSetBenchOnly") {
+            warmups = 2
+            iterations = 4
+            iterationTime = 2
+            iterationTimeUnit = "s"
+            reportFormat = "json"
+            include("ScatterSetBenchmark")
+        }
     }
 }
