@@ -21,29 +21,29 @@ jobs:
       matrix:
         target:
           # JVM benchmarks — JMH is happy on either arch but the arm runners are faster + free.
-          - id: jvm
-            label: Desktop / JVM
-            runner: ubuntu-24.04-arm
-            gradle-task: ":collectionsBenchmarks:jvmBenchmark"
+#          - id: jvm
+#            label: Desktop / JVM
+#            runner: ubuntu-24.04-arm
+#            gradle-task: ":collectionsBenchmarks:jvmBenchmark"
 
           # JS (Node) — needs no native toolchain, runs on arm.
-          - id: js
-            label: Kotlin/JS (Node)
-            runner: ubuntu-24.04-arm
-            gradle-task: ":collectionsBenchmarks:jsBenchmark"
+#          - id: js
+#            label: Kotlin/JS (Node)
+#            runner: ubuntu-24.04-arm
+#            gradle-task: ":collectionsBenchmarks:jsBenchmark"
 
           # Wasm/JS (Node) — same as JS.
           - id: wasmJs
             label: Kotlin/Wasm (Node)
             runner: ubuntu-24.04-arm
-            gradle-task: ":collectionsBenchmarks:wasmJsBenchmark"
+            gradle-task: ":collectionsBenchmarks:wasmJsScatterMapBenchOnlyBenchmark"
 
           # Native Linux x64 — module's build.gradle.kts only registers the linuxX64 target on
           # amd64 hosts, so this job MUST stay on x86_64 to compile and link.
-          - id: linuxX64
-            label: Native Linux x64
-            runner: ubuntu-latest
-            gradle-task: ":collectionsBenchmarks:linuxX64Benchmark"
+#          - id: linuxX64
+#            label: Native Linux x64
+#            runner: ubuntu-latest
+#            gradle-task: ":collectionsBenchmarks:linuxX64Benchmark"
 
     steps:
       - name: Checkout
